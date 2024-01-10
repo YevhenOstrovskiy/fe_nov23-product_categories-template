@@ -1,11 +1,7 @@
-import { findProducts } from "../../api";
-import { Product } from "../Product";
+import { Product } from '../Product';
 
-export const Table = ({products}) => { 
-    
-    
-    return (        
-    <table
+export const Table = ({ products }) => (
+  <table
     data-cy="ProductTable"
     className="table is-striped is-narrow is-fullwidth"
   >
@@ -62,10 +58,9 @@ export const Table = ({products}) => {
     </thead>
 
     <tbody>
-    {products.map((product) => (
-    <Product product={product} key={product.id}/>
-  ))}
+      {products.map(product => (
+        <Product product={product} key={product.id} />
+      ))}
     </tbody>
   </table>
-  );
-}
+);
