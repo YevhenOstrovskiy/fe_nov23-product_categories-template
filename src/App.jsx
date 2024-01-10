@@ -2,7 +2,7 @@
 import './App.scss';
 import { useState } from 'react';
 
-import { findProducts, findProductsByQuery } from './api';
+import { findProducts, findProductsByQuery, findProductsByUser } from './api';
 import { Table } from './components/Table';
 import { UserTabs } from './components/Tabs';
 import usersFromServer from './api/users';
@@ -18,15 +18,16 @@ export const products = findProducts();
 
 export const App = () => {
   const [sortField, setSortField] = useState('');
-  const visibleProducts = findProductsByQuery(products, sortField);
+  const foundProducts = findProductsByQuery(products, sortField);
   const reset = () => {
     setSortField('');
   };
 
-  const [selectedUser, setSelectedUser] = useState(usersFromServer[0]);
+  const [selectedUser, setSelectedUser] = useState('');
   const onUserSelected = (user) => {
     setSelectedUser(user);
   };
+  const userProducts = findProductsByUser(foundProducts, selectedUser.id);
 
   return (
     <div className="section">
@@ -128,8 +129,8 @@ export const App = () => {
         </div>
 
         <div className="box table-container">
-          { visibleProducts.length > 0 ? (
-            <Table products={visibleProducts} />
+          { userProducts.length > 0 ? (
+            <Table products={userProducts} />
           ) : (
             <p data-cy="NoMatchingMessage">
               No products matching selected criteria

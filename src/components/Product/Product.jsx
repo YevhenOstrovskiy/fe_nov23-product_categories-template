@@ -4,7 +4,7 @@ import { findCategory, findUser } from '../../api';
 
 export const Product = ({ product }) => {
   const category = findCategory(product.categoryId);
-  const user = findUser(category.ownerId);
+  const user = findUser(product.categoryId);
 
   return (
     <tr data-cy="Product">

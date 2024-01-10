@@ -4,7 +4,11 @@ export const UserTabs = ({ users, selectedUser, onUserSelected }) => (
   <p className="panel-tabs has-text-weight-bold">
     <a
       data-cy="FilterAllUsers"
-      href="#/"
+      href="#/all"
+      className={classNames({ 'is-active': selectedUser === '' })}
+      onClick={() => {
+          onUserSelected('');
+      }}
     >
       All
     </a>

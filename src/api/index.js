@@ -6,11 +6,12 @@ export function findCategory(categoryId) {
   return categoriesFromServer.find(category => category.id === categoryId);
 }
 
-export function findUser(categoryId) {
+export function findUser(productId) {
+  const category = findCategory(productId);
   return usersFromServer.find(
-    user => user.id === findCategory(categoryId).ownerId,
+    user => user.id === category.ownerId,
   )
-        || null;
+        
 }
 
 export function findProducts() {
@@ -28,6 +29,18 @@ export function findProductsByQuery(products, query) {
   if (normalizedQuery) {
     listOfProducts = listOfProducts.filter(
       product => product.name.toLowerCase().includes(normalizedQuery),
+    );
+  }
+
+  return listOfProducts;
+}
+
+export function findProductsByUser(products, id) {
+  let listOfProducts = [...products];
+
+  if (id) {
+    listOfProducts = listOfProducts.filter(
+      product => product.user.id === id
     );
   }
 
