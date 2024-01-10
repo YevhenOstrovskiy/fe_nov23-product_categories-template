@@ -3,8 +3,9 @@ import './App.scss';
 import { useState } from 'react';
 
 import { findProducts, findProductsByQuery } from './api';
-
 import { Table } from './components/Table';
+import { UserTabs } from './components/Tabs';
+import usersFromServer from './api/users';
 
 // const products = productsFromServer.map((product) => {
 //   const category = null; // find by product.categoryId
@@ -18,6 +19,14 @@ export const products = findProducts();
 export const App = () => {
   const [sortField, setSortField] = useState('');
   const visibleProducts = findProductsByQuery(products, sortField);
+  const reset = () => {
+    setSortField('');
+  };
+
+  const [selectedUser, setSelectedUser] = useState(usersFromServer[0]);
+  const onUserSelected = (user) => {
+    setSelectedUser(user);
+  };
 
   return (
     <div className="section">
@@ -28,36 +37,11 @@ export const App = () => {
           <nav className="panel">
             <p className="panel-heading">Filters</p>
 
-            <p className="panel-tabs has-text-weight-bold">
-              <a
-                data-cy="FilterAllUsers"
-                href="#/"
-              >
-                All
-              </a>
-
-              <a
-                data-cy="FilterUser"
-                href="#/"
-              >
-                User 1
-              </a>
-
-              <a
-                data-cy="FilterUser"
-                href="#/"
-                className="is-active"
-              >
-                User 2
-              </a>
-
-              <a
-                data-cy="FilterUser"
-                href="#/"
-              >
-                User 3
-              </a>
-            </p>
+            <UserTabs
+              users={usersFromServer}
+              selectedUser={selectedUser}
+              onUserSelected={onUserSelected}
+            />
 
             <div className="panel-block">
               <p className="control has-icons-left has-icons-right">
@@ -77,14 +61,15 @@ export const App = () => {
 
                 <span className="icon is-right">
                   {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                  {sortField && (
                   <button
-                    onClick={() => {
-                      setSortField();
-                    }}
+                    onClick={reset}
                     data-cy="ClearButton"
                     type="button"
                     className="delete"
                   />
+                  )
+                  }
                 </span>
               </p>
             </div>
@@ -143,11 +128,13 @@ export const App = () => {
         </div>
 
         <div className="box table-container">
-          <p data-cy="NoMatchingMessage">
-            No products matching selected criteria
-          </p>
-
-          <Table products={visibleProducts} />
+          { visibleProducts.length > 0 ? (
+            <Table products={visibleProducts} />
+          ) : (
+            <p data-cy="NoMatchingMessage">
+              No products matching selected criteria
+            </p>
+          )}
         </div>
       </div>
     </div>
